@@ -1,0 +1,1244 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VSSTORE - Sistem Kasir Digital</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2563eb',
+                        secondary: '#1e40af',
+                        accent: '#f59e0b'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    <!-- Login Page -->
+    <div id="loginPage" class="min-h-screen flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md">
+            <div class="text-center mb-8">
+                <div class="w-20 h-20 mx-auto mb-4 flex items-center justify-center">
+                    <img src="https://www.vsstore.id/assets/logo2.png" alt="VSSTORE Logo" class="w-full h-full object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="bg-primary rounded-full w-20 h-20 flex items-center justify-center text-white text-3xl" style="display: none;">VS</div>
+                </div>
+                <h1 class="text-2xl font-bold text-gray-800">VSSTORE</h1>
+                <p class="text-gray-600">Sistem Kasir Digital</p>
+            </div>
+            
+            <div class="space-y-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Username</label>
+                    <input type="text" id="username" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all" placeholder="Masukkan username" value="admin">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                    <input type="password" id="password" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all" placeholder="Masukkan password" value="admin123">
+                </div>
+                
+                <button onclick="login()" class="w-full bg-primary hover:bg-secondary text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 transform hover:scale-105">
+                    Masuk
+                </button>
+                
+                <div class="text-center text-sm text-gray-500">
+                    <p>Demo Login:</p>
+                    <p>Username: admin | Password: admin123</p>
+                    <p>Username: kasir | Password: kasir123</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Dashboard -->
+    <div id="dashboard" class="hidden">
+        <!-- Header -->
+        <header class="bg-white shadow-lg">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center py-4">
+                    <div class="flex items-center space-x-3">
+                        <img src="https://www.vsstore.id/assets/logo2.png" alt="VSSTORE Logo" class="w-8 h-8 object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';">
+                        <span class="text-2xl" style="display: none;">VS</span>
+                        <div>
+                            <h1 class="text-xl font-bold text-gray-800">VSSTORE</h1>
+                            <p class="text-sm text-gray-600">Sistem Kasir Digital</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <span class="text-sm text-gray-600">Selamat datang, <span id="currentUser" class="font-semibold">Admin</span></span>
+                        <button onclick="logout()" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-colors">
+                            Keluar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <div class="bg-white border-b">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <nav class="flex space-x-8">
+                    <button onclick="showTab('transaksi')" class="tab-btn py-4 px-2 border-b-2 border-primary text-primary font-medium">
+                        💳 Transaksi
+                    </button>
+                    <button onclick="showTab('barang')" class="tab-btn py-4 px-2 border-b-2 border-transparent text-gray-500 hover:text-gray-700">
+                        📦 Data Barang
+                    </button>
+                    <button onclick="showTab('saldo',  event)" class="tab-btn py-4 px-2 border-b-2 border-transparent text-gray-500 hover:text-gray-700">
+                        💳 Saldo Aplikasi
+                    </button>
+                    <button onclick="showTab('belanja')" class="tab-btn py-4 px-2 border-b-2 border-transparent text-gray-500 hover:text-gray-700">
+                        🛒 Form Belanja
+                    </button>
+                    <button onclick="showTab('laporan-belanja')" class="tab-btn py-4 px-2 border-b-2 border-transparent text-gray-500 hover:text-gray-700">
+                        📋 Laporan Belanja
+                    </button>
+                    <button onclick="showTab('transfer-saldo')" class="tab-btn py-4 px-2 border-b-2 border-transparent text-gray-500 hover:text-gray-700">
+                        🔄 Transfer Saldo
+                    </button>
+                    <button onclick="showTab('log-aktivitas')" class="tab-btn py-4 px-2 border-b-2 border-transparent text-gray-500 hover:text-gray-700">
+                        📝 Log Aktivitas
+                    </button>
+                    <button onclick="showTab('laporan')" class="tab-btn py-4 px-2 border-b-2 border-transparent text-gray-500 hover:text-gray-700">
+                        📊 Laporan
+                    </button>
+                    <button onclick="showTab('kelola-kasir')" class="tab-btn py-4 px-2 border-b-2 border-transparent text-gray-500 hover:text-gray-700" id="kelolaKasirTab" style="display: none;">
+                        👥 Kelola Kasir
+                    </button>
+                    <button onclick="showTab('laporan-kasir')" class="tab-btn py-4 px-2 border-b-2 border-transparent text-gray-500 hover:text-gray-700" id="laporanKasirTab" style="display: none;">
+                        📈 Laporan per Kasir
+                    </button>
+                </nav>
+            </div>
+        </div>
+
+        <!-- Content Area -->
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <!-- Transaksi Tab -->
+            <div id="transaksiTab" class="tab-content">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Form Transaksi -->
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <h2 class="text-xl font-bold text-gray-800 mb-6">Input Transaksi Baru</h2>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Jenis Transaksi</label>
+                                <select id="jenisTransaksi" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary" onchange="handleJenisTransaksiChange()">
+                                    <option value="">Pilih Jenis Transaksi</option>
+                                    <option value="Pulsa">Pulsa</option>
+                                    <option value="Paket Data">Paket Data</option>
+                                    <option value="PLN">PLN</option>
+                                    <option value="Transfer">Transfer</option>
+                                    <option value="Tagihan">Tagihan</option>
+                                    <option value="E-Wallet">Top Up E-Wallet</option>
+                                    <option value="Aksesoris">Penjualan Aksesoris</option>
+                                    <option value="Service HP">Service HP</option>
+                                    <option value="Tarik Tunai">Tarik Tunai</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Nama Item/Layanan</label>
+                                <div id="itemInputContainer">
+                                    <input type="text" id="namaItem" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary" placeholder="Contoh: Pulsa Telkomsel 50k">
+                                </div>
+                            </div>
+                            
+                            <div id="quantityContainer" class="hidden mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Jumlah</label>
+                                <input type="number" id="jumlahBarang" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary" placeholder="1" min="1" onchange="updateTotalHarga()">
+                                <div id="stokInfo" class="mt-2 text-sm text-gray-600 hidden">
+                                    Stok tersedia: <span id="stokTersedia" class="font-semibold text-green-600">0</span>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Uang Diterima</label>
+                                    <input type="number" id="nominal" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary" placeholder="50000">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Harga Modal</label>
+                                    <input type="number" id="keuntungan" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary" placeholder="48000">
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Metode Pembayaran</label>
+                                <select id="metodePembayaran" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary" onchange="checkSaldoAplikasiAsal()">
+                                    <option value="Tunai">Tunai</option>
+                                    <option value="Brimo">Brimo</option>
+                                    <option value="Dana">Dana</option>
+                                    <option value="Gopay">Gopay</option>
+                                    <option value="VSSTORE">VSSTORE</option>
+                                    <option value="RITA">RITA</option>
+                                    <option value="VIVAapps">VIVAapps</option>
+                                    <option value="Digipos">Digipos</option>
+                                    <option value="Simpel">Simpel</option>
+                                    <option value="SiDompul">SiDompul</option>
+                                    <option value="SeaBank">SeaBank</option>
+                                </select>
+                                <div id="saldoInfoAsal" class="mt-2 text-sm text-gray-600 hidden">
+                                    Saldo tersedia: <span id="saldoTersediaAsal" class="font-semibold text-green-600">Rp 0</span>
+                                </div>
+                            </div>
+                            
+                            <div id="aplikasiContainer">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Aplikasi yang Digunakan</label>
+                                <select id="aplikasiTransaksi" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary" onchange="checkSaldoAplikasi()">
+                                    <option value="Tunai">Tunai</option>
+                                    <option value="Brimo">Brimo</option>
+                                    <option value="Dana">Dana</option>
+                                    <option value="Gopay">Gopay</option>
+                                    <option value="VSSTORE">VSSTORE</option>
+                                    <option value="RITA">RITA</option>
+                                    <option value="VIVAapps">VIVAapps</option>
+                                    <option value="Digipos">Digipos</option>
+                                    <option value="Simpel">Simpel</option>
+                                    <option value="SiDompul">SiDompul</option>
+                                    <option value="SeaBank">SeaBank</option>
+                                </select>
+                                <div id="saldoInfo" class="mt-2 text-sm text-gray-600 hidden">
+                                    Saldo tersedia: <span id="saldoTersedia" class="font-semibold text-green-600">Rp 0</span>
+                                </div>
+                            </div>
+                            
+                            <button onclick="simpanTransaksi()" class="w-full bg-primary hover:bg-secondary text-white font-semibold py-3 px-4 rounded-lg transition-colors">
+                                Simpan Transaksi
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Riwayat Transaksi Hari Ini -->
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <h2 class="text-xl font-bold text-gray-800 mb-6">Transaksi Hari Ini</h2>
+                        
+                        <div class="space-y-4 max-h-96 overflow-y-auto" id="riwayatTransaksi">
+                            <!-- Transaksi items will be added here -->
+                        </div>
+                        
+                        <div class="mt-6 pt-4 border-t">
+                            <div class="flex justify-between items-center">
+                                <span class="font-semibold text-gray-700">Total Hari Ini:</span>
+                                <span class="text-xl font-bold text-primary" id="totalHariIni">Rp 0</span>
+                            </div>
+                            <div class="flex justify-between items-center mt-2">
+                                <span class="font-semibold text-gray-700">Total Keuntungan:</span>
+                                <span class="text-lg font-bold text-green-600" id="totalKeuntungan">Rp 0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Saldo Aplikasi Tab -->
+            <div id="saldoTab" class="tab-content hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Input Saldo Harian (Admin Only) -->
+                    <div id="inputSaldoSection" class="bg-white rounded-xl shadow-lg p-6">
+                        <h2 class="text-xl font-bold text-gray-800 mb-6">Input Saldo Harian</h2>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal</label>
+                                <input type="date" id="tanggalSaldo" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary" required>
+                            </div>
+                            
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Brimo (BRI Mobile)</label>
+                                    <input type="number" id="saldoBrimo" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary" placeholder="0">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Dana</label>
+                                    <input type="number" id="saldoDana" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary" placeholder="0">
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Gopay</label>
+                                    <input type="number" id="saldoGopay" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary" placeholder="0">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">VSSTORE</label>
+                                    <input type="number" id="saldoVSSTORE" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary" placeholder="0">
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">RITA</label>
+                                    <input type="number" id="saldoRITA" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary" placeholder="0">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">VIVAapps</label>
+                                    <input type="number" id="saldoVIVAapps" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary" placeholder="0">
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Digipos</label>
+                                    <input type="number" id="saldoDigipos" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary" placeholder="0">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Simpel</label>
+                                    <input type="number" id="saldoSimpel" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary" placeholder="0">
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">SiDompul</label>
+                                    <input type="number" id="saldoSiDompul" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary" placeholder="0">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">SeaBank</label>
+                                    <input type="number" id="saldoSeaBank" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary" placeholder="0">
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Tunai (Cash)</label>
+                                <input type="number" id="saldoTunai" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary" placeholder="0">
+                            </div>
+                            
+                            <button onclick="simpanSaldo()" class="w-full bg-primary hover:bg-secondary text-white font-semibold py-3 px-4 rounded-lg transition-colors">
+                                Simpan Saldo Harian
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Kasir View Only Section -->
+                    <div id="kasirViewOnlySection" class="bg-white rounded-xl shadow-lg p-6 hidden">
+                        <div class="flex items-center justify-center mb-6">
+                            <div class="bg-blue-100 rounded-full p-4 mr-4">
+                                <span class="text-3xl">👁️</span>
+                            </div>
+                            <div>
+                                <h2 class="text-xl font-bold text-gray-800">Saldo Aplikasi</h2>
+                                <p class="text-sm text-gray-600">Mode Lihat Saja - Kasir</p>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+                            <div class="flex items-center">
+                                <span class="text-yellow-600 mr-2">ℹ️</span>
+                                <p class="text-sm text-yellow-800">
+                                    Anda hanya dapat melihat saldo saat ini. Untuk mengubah saldo, hubungi administrator.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Saldo Saat Ini -->
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <h2 class="text-xl font-bold text-gray-800">Saldo Saat Ini</h2>
+                            <div class="flex space-x-3">
+                                <button onclick="kirimKeWhatsApp()" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-colors flex items-center space-x-2">
+                                    <span>📱</span>
+                                    <span>Kirim ke WhatsApp</span>
+                                </button>
+                                <button onclick="printSaldo()" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors flex items-center space-x-2">
+                                    <span>🖨️</span>
+                                    <span>Print Saldo</span>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-4" id="currentSaldoDisplay">
+                            <!-- Current saldo will be displayed here -->
+                        </div>
+                        
+                        <div class="mt-6 pt-4 border-t">
+                            <div class="flex justify-between items-center">
+                                <span class="font-semibold text-gray-700">Total Saldo:</span>
+                                <span class="text-xl font-bold text-primary" id="totalSaldo">Rp 0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form Belanja Tab -->
+            <div id="belanjaTab" class="tab-content hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Form Belanja -->
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <h2 class="text-xl font-bold text-gray-800 mb-6">Form Belanja Barang</h2>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Jenis Belanja</label>
+                                <select id="jenisBelanjaSelect" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary" onchange="handleJenisBelanjaChange()">
+                                    <option value="barang">Belanja Barang (Tambah ke Stok)</option>
+                                    <option value="pengeluaran">Pengeluaran Konter</option>
+                                </select>
+                                <p class="text-xs text-gray-500 mt-1" id="jenisBelanjaInfo">
+                                    Barang akan ditambahkan ke data stok dan tercatat di laporan belanja
+                                </p>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2" id="labelNamaItem">Nama Barang</label>
+                                <input type="text" id="namaBarangBelanja" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary" placeholder="Contoh: Case iPhone 14">
+                            </div>
+                            
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Jumlah Barang</label>
+                                    <input type="number" id="jumlahBarangBelanja" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary" placeholder="10" min="1" oninput="updateTotalBelanja()">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Harga Beli per Item</label>
+                                    <input type="number" id="hargaPerItem" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary" placeholder="25000" oninput="updateTotalBelanja()">
+                                </div>
+                            </div>
+                            
+                            <div id="hargaJualContainer">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Harga Jual per Item</label>
+                                <input type="number" id="hargaJualBelanja" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary" placeholder="35000">
+                                <p class="text-xs text-gray-500 mt-1">Harga yang akan digunakan untuk penjualan barang ini</p>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Total Belanja</label>
+                                <input type="number" id="totalBelanja" class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-100" readonly>
+
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Metode Pembayaran</label>
+                                <select id="metodePembayaranBelanja" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary" onchange="checkSaldoBelanja()">
+                                    <option value="Tunai">Tunai</option>
+                                    <option value="Brimo">Brimo</option>
+                                    <option value="Dana">Dana</option>
+                                    <option value="Gopay">Gopay</option>
+                                    <option value="VSSTORE">VSSTORE</option>
+                                    <option value="RITA">RITA</option>
+                                    <option value="VIVAapps">VIVAapps</option>
+                                    <option value="Digipos">Digipos</option>
+                                    <option value="Simpel">Simpel</option>
+                                    <option value="SiDompul">SiDompul</option>
+                                    <option value="SeaBank">SeaBank</option>
+                                </select>
+                                <div id="saldoInfoBelanja" class="mt-2 text-sm text-gray-600 hidden">
+                                    Saldo tersedia: <span id="saldoTersediaBelanja" class="font-semibold text-green-600">Rp 0</span>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Supplier/Toko</label>
+                                <input type="text" id="supplierBelanja" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary" placeholder="Nama supplier atau toko">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Catatan (Opsional)</label>
+                                <textarea id="catatanBelanja" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary" rows="3" placeholder="Catatan tambahan..."></textarea>
+                            </div>
+                            
+                            <button onclick="simpanBelanja()" class="w-full bg-primary hover:bg-secondary text-white font-semibold py-3 px-4 rounded-lg transition-colors">
+                                Simpan Belanja
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Riwayat Belanja Hari Ini -->
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <h2 class="text-xl font-bold text-gray-800 mb-6">Belanja Hari Ini</h2>
+                        
+                        <div class="space-y-4 max-h-96 overflow-y-auto" id="riwayatBelanja">
+                            <!-- Belanja items will be added here -->
+                        </div>
+                        
+                        <div class="mt-6 pt-4 border-t">
+                            <div class="flex justify-between items-center">
+                                <span class="font-semibold text-gray-700">Total Belanja Hari Ini:</span>
+                                <span class="text-xl font-bold text-red-600" id="totalBelanjaHariIni">Rp 0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Laporan Belanja Tab -->
+            <div id="laporan-belanjaTab" class="tab-content hidden">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
+                    <!-- Summary Cards -->
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <div class="flex items-center">
+                            <div class="bg-red-100 rounded-full p-3">
+                                <span class="text-2xl">🛒</span>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm font-medium text-gray-600">Total Belanja</p>
+                                <p class="text-2xl font-bold text-red-600" id="totalBelanjaLaporan">Rp 0</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <div class="flex items-center">
+                            <div class="bg-blue-100 rounded-full p-3">
+                                <span class="text-2xl">📦</span>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm font-medium text-gray-600">Belanja Barang</p>
+                                <p class="text-2xl font-bold text-blue-600" id="totalBelanjaBarang">Rp 0</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <div class="flex items-center">
+                            <div class="bg-orange-100 rounded-full p-3">
+                                <span class="text-2xl">💸</span>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm font-medium text-gray-600">Pengeluaran Konter</p>
+                                <p class="text-2xl font-bold text-orange-600" id="totalPengeluaranKonter">Rp 0</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <div class="flex items-center">
+                            <div class="bg-green-100 rounded-full p-3">
+                                <span class="text-2xl">📊</span>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm font-medium text-gray-600">Total Item Dibeli</p>
+                                <p class="text-2xl font-bold text-green-600" id="totalItemBelanja">0</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <div class="flex items-center">
+                            <div class="bg-purple-100 rounded-full p-3">
+                                <span class="text-2xl">🏪</span>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm font-medium text-gray-600">Total Transaksi</p>
+                                <p class="text-2xl font-bold text-purple-600" id="totalTransaksiBelanja">0</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Laporan Detail Belanja -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h2 class="text-xl font-bold text-gray-800 mb-6">Laporan Belanja</h2>
+                    
+                    <div class="flex flex-wrap gap-4 mb-6">
+                        <input type="date" id="tanggalMulaiBelanja" class="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary">
+                        <input type="date" id="tanggalAkhirBelanja" class="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary">
+                        <button onclick="filterLaporanBelanja()" class="bg-primary hover:bg-secondary text-white px-4 py-2 rounded-lg transition-colors">
+                            Filter
+                        </button>
+                        <button onclick="exportLaporanBelanja()" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-colors">
+                            Export Excel
+                        </button>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full table-auto">
+                            <thead>
+                                <tr class="bg-gray-50">
+                                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Tanggal</th>
+                                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Jenis</th>
+                                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Nama Item</th>
+                                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Jumlah</th>
+                                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Harga/Item</th>
+                                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Total</th>
+                                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Metode Bayar</th>
+                                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Supplier</th>
+                                </tr>
+                            </thead>
+                            <tbody id="laporanBelanjaTableBody">
+                                <!-- Laporan belanja items will be added here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Barang Tab -->
+            <div id="barangTab" class="tab-content hidden">
+                <!-- Summary Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <!-- Total Jenis Barang -->
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <div class="flex items-center">
+                            <div class="bg-blue-100 rounded-full p-3">
+                                <span class="text-2xl">📦</span>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm font-medium text-gray-600">Total Jenis Barang</p>
+                                <p class="text-2xl font-bold text-blue-600" id="totalJenisBarang">0</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Total Stok -->
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <div class="flex items-center">
+                            <div class="bg-green-100 rounded-full p-3">
+                                <span class="text-2xl">📊</span>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm font-medium text-gray-600">Total Stok</p>
+                                <p class="text-2xl font-bold text-green-600" id="totalStokBarang">0</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Total Modal -->
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <div class="flex items-center">
+                            <div class="bg-red-100 rounded-full p-3">
+                                <span class="text-2xl">💰</span>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm font-medium text-gray-600">Total Modal</p>
+                                <p class="text-2xl font-bold text-red-600" id="totalModalBarang">Rp 0</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Potensi Keuntungan -->
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <div class="flex items-center">
+                            <div class="bg-purple-100 rounded-full p-3">
+                                <span class="text-2xl">📈</span>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm font-medium text-gray-600">Potensi Keuntungan</p>
+                                <p class="text-2xl font-bold text-purple-600" id="potensiKeuntunganBarang">Rp 0</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Additional Summary Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <!-- Barang Stok Menipis -->
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center">
+                                <div class="bg-yellow-100 rounded-full p-3 mr-3">
+                                    <span class="text-2xl">⚠️</span>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-600">Stok Menipis</p>
+                                    <p class="text-xl font-bold text-yellow-600" id="barangStokMenipis">0</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="listStokMenipis" class="text-xs text-gray-600 max-h-20 overflow-y-auto">
+                            <!-- List akan diisi oleh JavaScript -->
+                        </div>
+                    </div>
+
+                    <!-- Barang Stok Habis -->
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center">
+                                <div class="bg-red-100 rounded-full p-3 mr-3">
+                                    <span class="text-2xl">❌</span>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-600">Stok Habis</p>
+                                    <p class="text-xl font-bold text-red-600" id="barangStokHabis">0</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="listStokHabis" class="text-xs text-gray-600 max-h-20 overflow-y-auto">
+                            <!-- List akan diisi oleh JavaScript -->
+                        </div>
+                    </div>
+
+                    <!-- Rata-rata Margin -->
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <div class="flex items-center">
+                            <div class="bg-indigo-100 rounded-full p-3">
+                                <span class="text-2xl">📊</span>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm font-medium text-gray-600">Rata-rata Margin</p>
+                                <p class="text-xl font-bold text-indigo-600" id="rataRataMargin">0%</p>
+                                <p class="text-xs text-gray-500">Keuntungan per item</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-bold text-gray-800">Data Barang</h2>
+                        <div class="flex space-x-3">
+                            <button onclick="exportBarangToExcel()" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-colors">
+                                📊 Export Excel
+                            </button>
+                            <button onclick="showAddBarangForm()" class="bg-primary hover:bg-secondary text-white px-4 py-2 rounded-lg transition-colors">
+                                + Tambah Barang
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Form Tambah Barang (Hidden by default) -->
+                    <div id="addBarangForm" class="hidden mb-6 p-4 bg-gray-50 rounded-lg">
+                        <h3 class="text-lg font-semibold mb-4">Tambah Barang Baru</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                            <input type="text" id="namaBarang" placeholder="Nama Barang" class="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary">
+                            <input type="number" id="hargaBeli" placeholder="Harga Beli" class="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary">
+                            <input type="number" id="hargaJual" placeholder="Harga Jual" class="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary">
+                            <input type="number" id="stokBarang" placeholder="Stok" class="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary">
+                            <button onclick="simpanBarang()" class="md:col-span-4 bg-primary hover:bg-secondary text-white py-2 px-4 rounded-lg transition-colors">
+                                Simpan Barang
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Tabel Barang -->
+                    <div class="overflow-x-auto">
+                        <table class="w-full table-auto">
+                            <thead>
+                                <tr class="bg-gray-50">
+                                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Nama Barang</th>
+                                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Harga Beli</th>
+                                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Harga Jual</th>
+                                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Stok</th>
+                                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="barangTableBody">
+                                <!-- Barang items will be added here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Transfer Saldo Tab -->
+            <div id="transfer-saldoTab" class="tab-content hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Form Transfer Saldo -->
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <h2 class="text-xl font-bold text-gray-800 mb-6">Transfer Saldo Antar Aplikasi</h2>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Dari Aplikasi</label>
+                                <select id="dariAplikasi" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary" onchange="checkSaldoAsal()">
+                                    <option value="">Pilih aplikasi asal</option>
+                                    <option value="Tunai">Tunai</option>
+                                    <option value="Brimo">Brimo</option>
+                                    <option value="Dana">Dana</option>
+                                    <option value="Gopay">Gopay</option>
+                                    <option value="VSSTORE">VSSTORE</option>
+                                    <option value="RITA">RITA</option>
+                                    <option value="VIVAapps">VIVAapps</option>
+                                    <option value="Digipos">Digipos</option>
+                                    <option value="Simpel">Simpel</option>
+                                    <option value="SiDompul">SiDompul</option>
+                                    <option value="SeaBank">SeaBank</option>
+                                </select>
+                                <div id="saldoAsalInfo" class="mt-2 text-sm text-gray-600 hidden">
+                                    Saldo tersedia: <span id="saldoAsal" class="font-semibold text-blue-600">Rp 0</span>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Ke Aplikasi</label>
+                                <select id="keAplikasi" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary" onchange="checkSaldoTujuan()">
+                                    <option value="">Pilih aplikasi tujuan</option>
+                                    <option value="Tunai">Tunai</option>
+                                    <option value="Brimo">Brimo</option>
+                                    <option value="Dana">Dana</option>
+                                    <option value="Gopay">Gopay</option>
+                                    <option value="VSSTORE">VSSTORE</option>
+                                    <option value="RITA">RITA</option>
+                                    <option value="VIVAapps">VIVAapps</option>
+                                    <option value="Digipos">Digipos</option>
+                                    <option value="Simpel">Simpel</option>
+                                    <option value="SiDompul">SiDompul</option>
+                                    <option value="SeaBank">SeaBank</option>
+                                </select>
+                                <div id="saldoTujuanInfo" class="mt-2 text-sm text-gray-600 hidden">
+                                    Saldo saat ini: <span id="saldoTujuan" class="font-semibold text-green-600">Rp 0</span>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Jumlah Transfer</label>
+                                <input type="number" id="jumlahTransfer" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary" placeholder="Masukkan jumlah yang akan ditransfer" min="1000" onchange="updateBiayaAdmin()">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Biaya Admin (Opsional)</label>
+                                <input type="number" id="biayaAdmin" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary" placeholder="0" min="0" onchange="updateBiayaAdmin()">
+                                <p class="text-xs text-gray-500 mt-1">Biaya admin akan dipotong dari saldo asal</p>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Jumlah yang Diterima</label>
+                                <input type="number" id="jumlahDiterima" class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-100" readonly>
+                                <p class="text-xs text-gray-500 mt-1">Jumlah transfer - biaya admin</p>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Keterangan</label>
+                                <textarea id="keteranganTransfer" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary" rows="3" placeholder="Keterangan transfer (opsional)"></textarea>
+                            </div>
+                            
+                            <button onclick="prosesTransferSaldo()" class="w-full bg-primary hover:bg-secondary text-white font-semibold py-3 px-4 rounded-lg transition-colors">
+                                Proses Transfer
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Riwayat Transfer Hari Ini -->
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <h2 class="text-xl font-bold text-gray-800 mb-6">Riwayat Transfer Hari Ini</h2>
+                        
+                        <div class="space-y-4 max-h-96 overflow-y-auto" id="riwayatTransfer">
+                            <!-- Transfer items will be added here -->
+                        </div>
+                        
+                        <div class="mt-6 pt-4 border-t">
+                            <div class="flex justify-between items-center">
+                                <span class="font-semibold text-gray-700">Total Transfer Hari Ini:</span>
+                                <span class="text-xl font-bold text-purple-600" id="totalTransferHariIni">Rp 0</span>
+                            </div>
+                            <div class="flex justify-between items-center mt-2">
+                                <span class="font-semibold text-gray-700">Total Biaya Admin:</span>
+                                <span class="text-lg font-bold text-red-600" id="totalBiayaAdmin">Rp 0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Log Aktivitas Tab -->
+            <div id="log-aktivitasTab" class="tab-content hidden">
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-bold text-gray-800">Log Aktivitas Sistem</h2>
+                        <div class="flex space-x-3">
+                            <select id="filterJenisAktivitas" class="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary" onchange="filterLogAktivitas()">
+                                <option value="">Semua Aktivitas</option>
+                                <option value="transfer">Transfer Saldo</option>
+                                <option value="belanja">Belanja Barang</option>
+                                <option value="stok">Penambahan Stok</option>
+                                <option value="edit_barang">Edit Barang</option>
+                                <option value="transaksi">Transaksi</option>
+                                <option value="saldo">Update Saldo</option>
+                            </select>
+                            <input type="date" id="filterTanggalLog" class="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary" onchange="filterLogAktivitas()">
+                            <button onclick="clearFilterLog()" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors">
+                                Reset Filter
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Summary Cards -->
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                        <div class="bg-blue-50 rounded-lg p-4">
+                            <div class="flex items-center">
+                                <span class="text-2xl mr-3">🔄</span>
+                                <div>
+                                    <p class="text-sm text-gray-600">Transfer Saldo</p>
+                                    <p class="text-xl font-bold text-blue-600" id="totalLogTransfer">0</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-red-50 rounded-lg p-4">
+                            <div class="flex items-center">
+                                <span class="text-2xl mr-3">🛒</span>
+                                <div>
+                                    <p class="text-sm text-gray-600">Belanja</p>
+                                    <p class="text-xl font-bold text-red-600" id="totalLogBelanja">0</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-purple-50 rounded-lg p-4">
+                            <div class="flex items-center">
+                                <span class="text-2xl mr-3">📦</span>
+                                <div>
+                                    <p class="text-sm text-gray-600">Tambah Stok</p>
+                                    <p class="text-xl font-bold text-purple-600" id="totalLogStok">0</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-green-50 rounded-lg p-4">
+                            <div class="flex items-center">
+                                <span class="text-2xl mr-3">✏️</span>
+                                <div>
+                                    <p class="text-sm text-gray-600">Edit Barang</p>
+                                    <p class="text-xl font-bold text-green-600" id="totalLogEdit">0</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Log Table -->
+                    <div class="overflow-x-auto">
+                        <table class="w-full table-auto">
+                            <thead>
+                                <tr class="bg-gray-50">
+                                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Waktu</th>
+                                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Jenis</th>
+                                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Deskripsi</th>
+                                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Detail</th>
+                                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">User</th>
+                                </tr>
+                            </thead>
+                            <tbody id="logAktivitasTableBody">
+                                <!-- Log items will be added here -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="flex justify-between items-center mt-6">
+                        <div class="text-sm text-gray-600">
+                            Menampilkan <span id="logShowingStart">0</span> - <span id="logShowingEnd">0</span> dari <span id="logTotalItems">0</span> aktivitas
+                        </div>
+                        <div class="flex space-x-2">
+                            <button onclick="prevPageLog()" id="prevPageBtn" class="px-3 py-1 border rounded hover:bg-gray-50 disabled:opacity-50" disabled>
+                                ← Sebelumnya
+                            </button>
+                            <span id="currentPageInfo" class="px-3 py-1">Halaman 1</span>
+                            <button onclick="nextPageLog()" id="nextPageBtn" class="px-3 py-1 border rounded hover:bg-gray-50 disabled:opacity-50" disabled>
+                                Selanjutnya →
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kelola Kasir Tab -->
+            <div id="kelola-kasirTab" class="tab-content hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Form Tambah Kasir -->
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <h2 class="text-xl font-bold text-gray-800 mb-6">Tambah Kasir Baru</h2>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Username</label>
+                                <input type="text" id="newKasirUsername" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary" placeholder="Masukkan username kasir">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                                <input type="password" id="newKasirPassword" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary" placeholder="Masukkan password">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Nama Lengkap</label>
+                                <input type="text" id="newKasirNama" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary" placeholder="Masukkan nama lengkap">
+                            </div>
+                            
+                            <button onclick="tambahKasir()" class="w-full bg-primary hover:bg-secondary text-white font-semibold py-3 px-4 rounded-lg transition-colors">
+                                Tambah Kasir
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Daftar Kasir -->
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <h2 class="text-xl font-bold text-gray-800 mb-6">Daftar Kasir</h2>
+                        
+                        <div class="space-y-4" id="daftarKasir">
+                            <!-- Kasir list will be populated here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Laporan per Kasir Tab -->
+            <div id="laporan-kasirTab" class="tab-content hidden">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <!-- Filter Kasir -->
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <h3 class="text-lg font-bold text-gray-800 mb-4">Filter Kasir</h3>
+                        <select id="filterKasir" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary" onchange="loadLaporanKasir()">
+                            <option value="">Semua Kasir</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Filter Tanggal -->
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <h3 class="text-lg font-bold text-gray-800 mb-4">Filter Tanggal</h3>
+                        <input type="date" id="filterTanggalKasir" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary" onchange="loadLaporanKasir()">
+                    </div>
+                    
+                    <!-- Summary -->
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <h3 class="text-lg font-bold text-gray-800 mb-4">Ringkasan</h3>
+                        <div class="space-y-2">
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-600">Total Transaksi:</span>
+                                <span class="font-semibold" id="totalTransaksiKasir">0</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-600">Total Penjualan:</span>
+                                <span class="font-semibold text-green-600" id="totalPenjualanKasir">Rp 0</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-600">Total Keuntungan:</span>
+                                <span class="font-semibold text-blue-600" id="totalKeuntunganKasir">Rp 0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Performance Cards per Kasir -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8" id="performanceKasirCards">
+                    <!-- Performance cards will be populated here -->
+                </div>
+
+                <!-- Detail Transaksi per Kasir -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h2 class="text-xl font-bold text-gray-800 mb-6">Detail Transaksi per Kasir</h2>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="w-full table-auto">
+                            <thead>
+                                <tr class="bg-gray-50">
+                                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Kasir</th>
+                                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Tanggal & Jam</th>
+                                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Jenis</th>
+                                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Item/Layanan</th>
+                                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Nominal</th>
+                                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Keuntungan</th>
+                                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Pembayaran</th>
+                                </tr>
+                            </thead>
+                            <tbody id="laporanKasirTableBody">
+                                <!-- Laporan kasir items will be added here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Laporan Tab -->
+            <div id="laporanTab" class="tab-content hidden">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <!-- Summary Cards -->
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <div class="flex items-center">
+                            <div class="bg-blue-100 rounded-full p-3">
+                                <span class="text-2xl">💰</span>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm font-medium text-gray-600">Total Penjualan</p>
+                                <p class="text-2xl font-bold text-gray-900" id="totalPenjualan">Rp 0</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <div class="flex items-center">
+                            <div class="bg-green-100 rounded-full p-3">
+                                <span class="text-2xl">📈</span>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm font-medium text-gray-600">Total Keuntungan</p>
+                                <p class="text-2xl font-bold text-green-600" id="totalKeuntunganLaporan">Rp 0</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <div class="flex items-center">
+                            <div class="bg-purple-100 rounded-full p-3">
+                                <span class="text-2xl">🛍️</span>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm font-medium text-gray-600">Total Transaksi</p>
+                                <p class="text-2xl font-bold text-purple-600" id="totalTransaksi">0</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Laporan Detail -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h2 class="text-xl font-bold text-gray-800 mb-6">Laporan Transaksi</h2>
+                    
+                    <div class="flex flex-wrap gap-4 mb-6">
+                        <input type="date" id="tanggalMulai" class="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary">
+                        <input type="date" id="tanggalAkhir" class="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary">
+                        <button onclick="filterLaporan()" class="bg-primary hover:bg-secondary text-white px-4 py-2 rounded-lg transition-colors">
+                            Filter
+                        </button>
+                        <button onclick="exportLaporan()" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-colors">
+                            Export Excel
+                        </button>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full table-auto">
+                            <thead>
+                                <tr class="bg-gray-50">
+                                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Tanggal & Jam</th>
+                                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Jenis</th>
+                                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Item/Layanan</th>
+                                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Nominal</th>
+                                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Keuntungan</th>
+                                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Pembayaran</th>
+                                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Saldo Digunakan</th>
+                                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">User</th>
+                                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="laporanTableBody">
+                                <!-- Laporan items will be added here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+<!-- Modal untuk View Barang -->
+<div id="viewBarangModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+    <div class="bg-white rounded-xl shadow-2xl p-6 w-full max-w-md mx-4">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-xl font-bold text-gray-800">Detail Barang</h3>
+            <button onclick="closeViewBarangModal()" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+        </div>
+        <div id="viewBarangContent" class="space-y-4">
+            <!-- Content will be populated by JavaScript -->
+        </div>
+        <div class="mt-6 flex justify-end">
+            <button onclick="closeViewBarangModal()" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors">
+                Tutup
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal untuk Edit Barang -->
+<div id="editBarangModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+    <div class="bg-white rounded-xl shadow-2xl p-6 w-full max-w-md mx-4">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-xl font-bold text-gray-800">Edit Barang</h3>
+            <button onclick="closeEditBarangModal()" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+        </div>
+        <div class="space-y-4">
+            <input type="hidden" id="editBarangId">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Nama Barang</label>
+                <input type="text" id="editNamaBarang" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Harga Beli</label>
+                <input type="number" id="editHargaBeli" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Harga Jual</label>
+                <input type="number" id="editHargaJual" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Stok</label>
+                <input type="number" id="editStokBarang" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary">
+            </div>
+        </div>
+        <div class="mt-6 flex justify-end space-x-3">
+            <button onclick="closeEditBarangModal()" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors">
+                Batal
+            </button>
+            <button onclick="updateBarang()" class="bg-primary hover:bg-secondary text-white px-4 py-2 rounded-lg transition-colors">
+                Simpan
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal untuk Tambah Stok -->
+<div id="addStokModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+    <div class="bg-white rounded-xl shadow-2xl p-6 w-full max-w-md mx-4">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-xl font-bold text-gray-800">Tambah Stok Barang</h3>
+            <button onclick="closeAddStokModal()" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+        </div>
+        <div class="space-y-4">
+            <input type="hidden" id="addStokBarangId">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Nama Barang</label>
+                <input type="text" id="addStokNamaBarang" class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-100" readonly>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Stok Saat Ini</label>
+                <input type="number" id="addStokCurrent" class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-100" readonly>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Tambah Stok</label>
+                <input type="number" id="addStokJumlah" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary" placeholder="Masukkan jumlah stok yang ditambah" min="1" onchange="updateTotalBiayaStok()">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Harga Beli per Item</label>
+                <input type="number" id="addStokHargaBeli" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary" placeholder="Harga beli per item" onchange="updateTotalBiayaStok()">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Total Biaya Pembelian</label>
+                <input type="number" id="addStokTotalBiaya" class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-100" readonly>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Metode Pembayaran</label>
+                <select id="addStokMetodePembayaran" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary" onchange="checkSaldoAddStok()">
+                    <option value="Tunai">Tunai</option>
+                    <option value="Brimo">Brimo</option>
+                    <option value="Dana">Dana</option>
+                    <option value="Gopay">Gopay</option>
+                    <option value="VSSTORE">VSSTORE</option>
+                    <option value="RITA">RITA</option>
+                    <option value="VIVAapps">VIVAapps</option>
+                    <option value="Digipos">Digipos</option>
+                    <option value="Simpel">Simpel</option>
+                    <option value="SiDompul">SiDompul</option>
+                    <option value="SeaBank">SeaBank</option>
+                </select>
+                <div id="saldoInfoAddStok" class="mt-2 text-sm text-gray-600 hidden">
+                    Saldo tersedia: <span id="saldoTersediaAddStok" class="font-semibold text-green-600">Rp 0</span>
+                </div>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Supplier/Toko</label>
+                <input type="text" id="addStokSupplier" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary" placeholder="Nama supplier atau toko">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Catatan (Opsional)</label>
+                <textarea id="addStokCatatan" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary" rows="3" placeholder="Catatan penambahan stok..."></textarea>
+            </div>
+        </div>
+        <div class="mt-6 flex justify-end space-x-3">
+            <button onclick="closeAddStokModal()" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors">
+                Batal
+            </button>
+            <button onclick="saveAddStok()" class="bg-primary hover:bg-secondary text-white px-4 py-2 rounded-lg transition-colors">
+                Tambah Stok
+            </button>
+        </div>
+    </div>
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
